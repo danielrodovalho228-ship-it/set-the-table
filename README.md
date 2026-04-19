@@ -1,0 +1,118 @@
+# Set the Table
+
+An MVP for designing and shopping for table settings across occasions
+(Thanksgiving, Christmas, birthdays, dinner parties).
+
+## Stack
+
+- Next.js 14 (App Router) + TypeScript (strict)
+- Tailwind CSS (neutral, premium palette)
+- Supabase (Postgres + Auth + RLS) — optional; falls back to mock data
+- No Prisma, no AR, no 3D
+
+## Quick start
+
+```bash
+npm install
+cp .env.local.example .env.local   # only needed for auth / saving
+npm run dev
+```
+
+Open http://localhost:3000.
+
+### Visual preview (no install)
+
+Open `preview.html` directly in a browser — it renders the Landing, Explore,
+Scenario, Customizer, and Shopping List pages with working swap and live
+pricing. Handy for sharing the concept before running the full app.
+
+## Supabase setup (optional)
+
+Required only for auth, favorites, and saved setups.
+
+1. Create a Supabase project.
+2. In the SQL editor, run `supabase/migrations/0001_init.sql`.
+3. Then run `supabase/seed.sql` to load the 40 products and 6 scenarios.
+4. Paste your project URL and anon key into `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+Restart dev. Auth (magic link), favorites, and saved setups now work.
+
+## Features
+
+- **Landing** with hero, value props, and featured occasions.
+- **Explore** with occasion/style/budget filters (URL-driven).
+- **Scenario detail** with item list, price summary, and favorite toggle.
+- **Slot-based Customizer** — swap any of 10 slots (tablecloth, runner,
+  charger, dinner plate, salad plate, napkin, flatware, glasses, centerpiece,
+  candles). Price updates live.
+- **Save setups** to your account (Supabase).
+- **Favorites** with optimistic toggle.
+- **Shopping list** — grouped by section (linens, place settings, flatware &
+  glassware, decor), copy to clipboard, print / save as PDF.
+- **Loading skeletons** for major routes.
+- **Print styles** for the shopping list.
+- **Auth** via Supabase magic link.
+
+## Project layout
+
+```
+app/                 Next.js routes (RSC by default)
+  layout.tsx
+  page.tsx                                Landing
+  explore/page.tsx                        Explore + filters
+  scenarios/[slug]/page.tsx               Scenario detail
+  scenarios/[slug]/customize/page.tsx     Interactive customizer
+  scenarios/[slug]/shopping-list/page.tsx Ad-hoc shopping list
+  account/page.tsx                        Favorites + saved setups
+  account/setups/[id]/page.tsx            Saved setup
+  account/setups/[id]/shopping-list/page.tsx  Saved setup shopping list
+  auth/login/page.tsx                     Magic link request
+  auth/callback/route.ts                  Magic link callback
+  auth/logout/route.ts
+  not-found.tsx, error.tsx, loading.tsx
+components/
+  ui/                Button, Card, Badge, Input, Select
+  layout/            Nav (async server), Footer
+  scenario/          ScenarioCard, ItemList, PriceSummary, FavoriteButton
+  customizer/        Customizer, SlotCard, ProductSwapper, LivePrice
+  shopping/          ShoppingList, ShoppingActions
+lib/
+  slots.ts           10 slot definitions + metadata
+  pricing.ts         computeTotal (pure)
+  shopping.ts        section-grouped shopping list + URL parser
+  queries.ts         Data layer (Supabase or mock fallback)
+  actions.ts         Server actions (auth, favorites, save setup)
+  supabase/          server + browser clients, DB types
+  utils.ts
+data/mock.ts         40 products, 6 scenarios
+types/domain.ts      Core types (Product, Scenario, Setup, etc.)
+supabase/
+  migrations/0001_init.sql
+  seed.sql
+middleware.ts        Supabase session refresh
+```
+
+## Scripts
+
+- `npm run dev` — local dev
+- `npm run build` — production build
+- `npm run typecheck` — strict TypeScript check
+- `npm run lint`
+
+## MVP acceptance checklist
+
+- [x] Runs locally
+- [x] Navigation works end-to-end
+- [x] 6 scenarios
+- [x] Slot-based customization (10 slots)
+- [x] Price updates correctly with guest count and per-slot swaps
+- [x] Shopping list generates (grouped, quantity, total)
+- [x] Favorites (Supabase)
+- [x] Auth (Supabase magic link)
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full design plan.
