@@ -50,6 +50,10 @@ export interface Product {
   per_guest: boolean;        // multiply by guest count
   image_url: string;
   retailer_url?: string;
+  // Monetization fields (added in phase 4):
+  is_my_product?: boolean;   // true when this is the app owner's Amazon product
+  asin?: string;             // Amazon Standard Identification Number
+  retailer_name?: string;    // e.g. "Amazon", "Williams Sonoma"
 }
 
 export interface Scenario {
@@ -62,6 +66,8 @@ export interface Scenario {
   hero_image_url: string;
   default_guest_count: number;
   budget_tier: BudgetTier;
+  // AI-generated hero (overrides hero_image_url when present):
+  generated_hero_url?: string | null;
   // For Phase 1 we denormalize the slot map onto the scenario:
   items: Record<SlotId, string>; // slot -> product_id
 }

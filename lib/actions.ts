@@ -4,7 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createSupabaseServer } from "@/lib/supabase/server";
-import type { SlotId } from "@/types/domain";
+import { generateTableImage } from "@/lib/ai/image";
+import { buildScenarioHeroPrompt } from "@/lib/ai/prompts";
+import { fetchAndStoreImage, getAdminSupabase } from "@/lib/ai/storage";
+import { PRODUCT_BY_ID } from "@/data/mock";
+import type { Product, Setup, SlotId } from "@/types/domain";
 
 // ---------- auth ----------
 
@@ -101,4 +105,73 @@ export async function saveCustomSetup(input: {
 
   revalidatePath("/account");
   return { ok: true, id: setup.id };
+}
+
+// ---------- AI image generation ----------
+
+/**
+ * Re-generates the hero image for a scenario using the configured AI provider,
+ * uploads to Supabase Storage, and stamps `scenarios.generated_hero_url`.
+ *
+ * Callable from the client via Server Action. Requires SUPABASE_SERVICE_ROLE_KEY
+ * in env (for Storage write) — so this is disabled if not configured.
+ */
+export async function regenerateScenarioHero(scenarioId: string) {
+  const hasServiceRole = Boolean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY
+  );
+  if (!hasServiceRole) {
+    return {
+      ok: false as const,
+      error:
+        "Image generation requires SUPABASE_SERVICE_ROLE_KEY in Vercel env. Contact the admin."
+    };
+  }
+
+  try {
+    const admin = getAdminSupabase();
+    const { data: scenario } = await admin
+      .from("scenarios")
+      .select("*")
+      .eq("id", scenarioId)
+      .maybeSingle();
+    if (!scenario) return { ok: false as const, error: "Scenario not found" };
+
+    const { data: items } = await admin
+      .from("scenario_items")
+      .select("slot, product_id")
+      .eq("scenario_id", scenarioId);
+    const { data: products } = await admin.from("products").select("*");
+    const productById = new Map((products ?? []).map((p) => [p.id, p]));
+
+    const setup: Setup = {} as Setup;
+    for (const it of items ?? []) {
+      const p = productById.get(it.product_id) ?? PRODUCT_BY_ID[it.product_id];
+      if (p) (setup as any)[it.slot as SlotId] = p as Product;
+    }
+
+    const prompt = buildScenarioHeroPrompt(scenario as any, setup);
+    const generated = await generateTableImage(prompt);
+    const stamp = Date.now();
+    const publicUrl = await fetchAndStoreImage(
+      generated.url,
+      `${scenario.slug}-${stamp}`
+    );
+
+    await admin
+      .from("scenarios")
+      .update({
+        generated_hero_url: publicUrl,
+        generated_at: new Date().toISOString()
+      })
+      .eq("id", scenarioId);
+
+    revalidatePath(`/scenarios/${scenario.slug}`);
+    return { ok: true as const, url: publicUrl };
+  } catch (e: any) {
+    return {
+      ok: false as const,
+      error: e?.message ?? "Image generation failed"
+    };
+  }
 }

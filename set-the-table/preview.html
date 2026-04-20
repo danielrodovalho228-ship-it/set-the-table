@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Set the Table — Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bone:  "#F7F3EC",
+          paper: "#FBF9F4",
+          ink:   "#1A1A1A",
+          stone: {
+            50:"#F5F4F1",100:"#EAE8E2",200:"#D6D3CA",300:"#B9B5A9",
+            400:"#948F80",500:"#6E6A5E",600:"#51503F",700:"#3D3A30",
+            800:"#2A2820",900:"#1C1B15"
+          },
+          accent:   { DEFAULT: "#8B5A3C", soft: "#B27E5C", ink: "#4B2E1E" }
+        },
+        fontFamily: {
+          serif: ["Georgia","Cambria","Times New Roman","serif"],
+          sans:  ["system-ui","-apple-system","Segoe UI","Inter","sans-serif"]
+        },
+        letterSpacing: { tight2: "-0.02em" },
+        boxShadow: {
+          soft: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.12)"
+        }
+      }
+    }
+  };
+</script>
+<style>
+  body { background: #FBF9F4; color: #1A1A1A; }
+  .line-clamp-2 {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .tab-btn { border-bottom: 2px solid transparent; }
+  .tab-btn.active { border-color: #8B5A3C; color: #1A1A1A; }
+</style>
+</head>
+<body class="font-sans">
+
+<!-- Nav -->
+<header class="border-b border-stone-200 bg-paper/80 sticky top-0 z-20 backdrop-blur">
+  <div class="max-w-6xl mx-auto h-16 px-5 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-accent inline-block"></span>
+      <span class="font-serif text-lg tracking-tight2">Set the Table</span>
+    </div>
+    <nav class="flex items-center gap-6 text-[15px] text-stone-700">
+      <button class="tab-btn active" onclick="showTab('landing')">Landing</button>
+      <button class="tab-btn" onclick="showTab('explore')">Explore</button>
+      <button class="tab-btn" onclick="showTab('scenario')">Scenario</button>
+      <button class="tab-btn" onclick="showTab('customizer')">Customizer</button>
+      <button class="tab-btn" onclick="showTab('shopping')">Shopping list</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== LANDING ===== -->
+<section id="tab-landing" class="tab">
+  <div class="max-w-6xl mx-auto px-5 pt-16 pb-14 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <p class="text-sm tracking-[0.18em] uppercase text-accent mb-4">Tables worth remembering</p>
+      <h1 class="font-serif text-5xl md:text-6xl tracking-tight2 leading-[1.02]">
+        Set the perfect table, <span class="text-accent">for any occasion.</span>
+      </h1>
+      <p class="mt-5 text-[17px] text-stone-600 max-w-prose">
+        Browse curated table settings for Thanksgiving, Christmas, birthdays and dinner parties.
+        Customize every piece, see the cost instantly, and save a shopping list.
+      </p>
+      <div class="mt-8 flex gap-3">
+        <button class="h-12 px-6 rounded-lg bg-ink text-paper hover:bg-stone-700">Explore settings</button>
+        <button class="h-12 px-6 rounded-lg border border-stone-300 hover:bg-stone-50">See a sample</button>
+      </div>
+    </div>
+    <div class="aspect-[5/4] rounded-xl shadow-soft bg-stone-100 bg-center bg-cover"
+         style="background-image:url('https://images.unsplash.com/photo-1574672280600-4accfa5b6f98?auto=format&fit=crop&w=1200&q=70')"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-5 py-10 grid md:grid-cols-3 gap-6">
+    <div class="rounded-lg border border-stone-200 bg-paper p-6">
+      <h3 class="font-serif text-xl tracking-tight2">Curated by occasion</h3>
+      <p class="mt-2 text-[15px] text-stone-600">Holiday dinners, birthdays, and intimate gatherings — every scenario is a starting point you can actually use.</p>
+    </div>
+    <div class="rounded-lg border border-stone-200 bg-paper p-6">
+      <h3 class="font-serif text-xl tracking-tight2">Customize every slot</h3>
+      <p class="mt-2 text-[15px] text-stone-600">Swap tablecloth, plates, napkins, flatware, centerpiece. The cost updates as you go.</p>
+    </div>
+    <div class="rounded-lg border border-stone-200 bg-paper p-6">
+      <h3 class="font-serif text-xl tracking-tight2">Shopping list in one click</h3>
+      <p class="mt-2 text-[15px] text-stone-600">Grouped by category, with quantities tied to your guest count.</p>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-5 py-14">
+    <div class="flex items-baseline justify-between mb-6">
+      <h2 class="font-serif text-3xl tracking-tight2">Featured occasions</h2>
+      <a class="text-sm text-accent hover:underline cursor-pointer" onclick="showTab('explore')">Explore all →</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6" id="featured-grid"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-5 py-14">
+    <div class="rounded-xl bg-ink text-paper px-10 py-14 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <h2 class="font-serif text-3xl tracking-tight2">Plan your next table in minutes.</h2>
+        <p class="mt-2 text-stone-300 max-w-prose">Save favorites, customize settings, and bring a shopping list to check out.</p>
+      </div>
+      <button class="h-12 px-6 rounded-lg bg-accent text-paper hover:bg-accent-ink">Start exploring</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPLORE ===== -->
+<section id="tab-explore" class="tab hidden">
+  <div class="max-w-6xl mx-auto px-5 pt-12 pb-16">
+    <header class="mb-8">
+      <h1 class="font-serif text-4xl tracking-tight2">Explore</h1>
+      <p class="mt-2 text-stone-600 max-w-prose">Curated table settings, ready to copy or customize.</p>
+    </header>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+      <label class="flex flex-col gap-1 text-sm text-stone-600">Occasion
+        <select class="h-11 rounded-lg border border-stone-300 bg-paper px-3" onchange="applyFilters()" id="f-occasion">
+          <option value="all">All occasions</option>
+          <option value="thanksgiving">thanksgiving</option>
+          <option value="christmas">christmas</option>
+          <option value="birthday">birthday</option>
+          <option value="dinner_party">dinner party</option>
+          <option value="easter">easter</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-stone-600">Style
+        <select class="h-11 rounded-lg border border-stone-300 bg-paper px-3" onchange="applyFilters()" id="f-style">
+          <option value="all">Any style</option>
+          <option value="modern">modern</option>
+          <option value="rustic">rustic</option>
+          <option value="classic">classic</option>
+          <option value="minimal">minimal</option>
+          <option value="festive">festive</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1 text-sm text-stone-600">Budget
+        <select class="h-11 rounded-lg border border-stone-300 bg-paper px-3" onchange="applyFilters()" id="f-budget">
+          <option value="all">Any budget</option>
+          <option value="under_100">Under $100</option>
+          <option value="100_250">$100–250</option>
+          <option value="250_500">$250–500</option>
+          <option value="500_plus">$500+</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="explore-grid"></div>
+  </div>
+</section>
+
+<!-- ===== SCENARIO DETAIL ===== -->
+<section id="tab-scenario" class="tab hidden">
+  <article class="max-w-6xl mx-auto px-5 pt-10 pb-20">
+    <a class="text-sm text-stone-500 hover:text-ink cursor-pointer" onclick="showTab('explore')">← Back to explore</a>
+    <header class="mt-4 grid md:grid-cols-2 gap-8 items-end">
+      <div>
+        <div class="flex gap-2 mb-3">
+          <span class="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium bg-stone-100 text-stone-700 border border-stone-200">Thanksgiving</span>
+          <span class="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium bg-stone-100 text-stone-700 border border-stone-200">Classic</span>
+        </div>
+        <h1 class="font-serif text-5xl tracking-tight2">A Classic Thanksgiving</h1>
+        <p class="mt-4 text-[17px] text-stone-600 max-w-prose">
+          Warm neutrals, gold-rimmed plates, and a low garland of eucalyptus. A timeless setting that invites the family to linger.
+        </p>
+      </div>
+      <div class="aspect-[5/4] rounded-xl shadow-soft bg-stone-100 bg-center bg-cover"
+           style="background-image:url('https://images.unsplash.com/photo-1574672280600-4accfa5b6f98?auto=format&fit=crop&w=1200&q=70')"></div>
+    </header>
+
+    <section class="mt-12 grid md:grid-cols-[1fr_320px] gap-8">
+      <div>
+        <h2 class="font-serif text-2xl tracking-tight2 mb-4">What's on the table</h2>
+        <ul class="divide-y divide-stone-200 border border-stone-200 rounded-lg overflow-hidden bg-paper" id="items-list"></ul>
+      </div>
+      <aside class="space-y-4">
+        <div class="rounded-lg border border-stone-200 bg-paper p-5">
+          <div class="flex items-baseline justify-between">
+            <span class="text-sm text-stone-500">Estimated total</span>
+            <span class="font-serif text-3xl tracking-tight2" id="scenario-total">$—</span>
+          </div>
+          <div class="mt-2 text-[13px] text-stone-500" id="scenario-perguest">— per guest · 8 guests</div>
+        </div>
+        <button class="w-full h-12 px-6 rounded-lg bg-ink text-paper hover:bg-stone-700" onclick="showTab('customizer')">Customize</button>
+        <button class="w-full h-12 px-6 rounded-lg border border-stone-300 hover:bg-stone-50">Save to favorites</button>
+        <button class="w-full h-12 px-6 rounded-lg hover:bg-stone-100">Generate shopping list</button>
+      </aside>
+    </section>
+  </article>
+</section>
+
+<!-- ===== CUSTOMIZER (preview) ===== -->
+<section id="tab-customizer" class="tab hidden">
+  <div class="max-w-6xl mx-auto px-5 pt-10 pb-20">
+    <a class="text-sm text-stone-500 hover:text-ink cursor-pointer" onclick="showTab('scenario')">← Back to scenario</a>
+    <h1 class="font-serif text-4xl tracking-tight2 mt-4">Customize — A Classic Thanksgiving</h1>
+    <p class="text-stone-600 mt-2">Click a slot to swap the item. Total updates live.</p>
+
+    <div class="mt-8 grid md:grid-cols-[1fr_320px] gap-8">
+      <div class="grid sm:grid-cols-2 gap-3" id="slot-grid"></div>
+      <aside class="space-y-4">
+        <div class="rounded-lg border border-stone-200 bg-paper p-5">
+          <div class="flex items-baseline justify-between">
+            <span class="text-sm text-stone-500">Live total</span>
+            <span class="font-serif text-3xl tracking-tight2" id="cust-total">$—</span>
+          </div>
+          <label class="mt-4 block text-sm text-stone-600">Guests
+            <input type="number" min="1" max="30" value="8" id="cust-guests"
+              class="mt-1 h-11 w-full rounded-lg border border-stone-300 bg-paper px-3" oninput="renderCustomizer()" />
+          </label>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SHOPPING LIST ===== -->
+<section id="tab-shopping" class="tab hidden">
+  <div class="max-w-4xl mx-auto px-5 pt-10 pb-20">
+    <a class="text-sm text-stone-500 hover:text-ink cursor-pointer" onclick="showTab('customizer')">← Back to customize</a>
+    <header class="mt-4 mb-6 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="font-serif text-4xl tracking-tight2" id="sl-title">Shopping list</h1>
+        <p class="mt-1 text-stone-600" id="sl-sub">— guests · grouped by section</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="h-11 px-5 rounded-lg bg-ink text-paper hover:bg-stone-700" onclick="copyShopping()" id="sl-copy">Copy to clipboard</button>
+        <button class="h-11 px-5 rounded-lg border border-stone-300 hover:bg-stone-50" onclick="window.print()">Print / Save as PDF</button>
+      </div>
+    </header>
+    <div id="sl-groups" class="space-y-8"></div>
+    <div class="mt-8 rounded-lg border border-stone-300 bg-paper p-5 flex items-baseline justify-between">
+      <div>
+        <p class="text-sm text-stone-500" id="sl-totallabel">Total · — guests</p>
+        <p class="text-[12px] text-stone-500" id="sl-perguest">— per guest</p>
+      </div>
+      <p class="font-serif text-3xl tracking-tight2" id="sl-total">$—</p>
+    </div>
+  </div>
+</section>
+
+<!-- Swap drawer -->
+<div id="drawer" class="hidden fixed inset-0 z-30 bg-black/40" onclick="closeDrawer(event)">
+  <div class="absolute right-0 top-0 h-full w-full sm:w-[420px] bg-paper p-6 overflow-y-auto" onclick="event.stopPropagation()">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-serif text-2xl tracking-tight2" id="drawer-title">Swap</h3>
+      <button class="h-9 w-9 rounded-lg hover:bg-stone-100" onclick="closeDrawer()">×</button>
+    </div>
+    <div id="drawer-items" class="space-y-3"></div>
+  </div>
+</div>
+
+<footer class="border-t border-stone-200 mt-16">
+  <div class="max-w-6xl mx-auto px-5 py-10 flex flex-col sm:flex-row justify-between gap-4 text-sm text-stone-500">
+    <span>© 2026 Set the Table</span>
+    <span>Built for dinners worth remembering.</span>
+  </div>
+</footer>
+
+<script>
+// ---------- Seed data (mirrors data/mock.ts) ----------
+const IMG = (id,w=800) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
+
+const SLOTS = [
+  { id:"tablecloth",   label:"Tablecloth",   per_guest:false },
+  { id:"runner",       label:"Runner",       per_guest:false },
+  { id:"charger",      label:"Charger",      per_guest:true  },
+  { id:"dinner_plate", label:"Dinner Plate", per_guest:true  },
+  { id:"salad_plate",  label:"Salad Plate",  per_guest:true  },
+  { id:"napkin",       label:"Napkin",       per_guest:true  },
+  { id:"flatware",     label:"Flatware Set", per_guest:true  },
+  { id:"glasses",      label:"Glassware",    per_guest:true  },
+  { id:"centerpiece",  label:"Centerpiece",  per_guest:false },
+  { id:"candles",      label:"Candles",      per_guest:false }
+];
+
+const PRODUCTS = [
+  { id:"tc-linen-ivory",  name:"Washed Linen Tablecloth, Ivory", category:"tablecloth", style:"classic", price_cents:8900,  per_guest:false, image_url:IMG("photo-1618220179428-22790b461013") },
+  { id:"tc-linen-sage",   name:"Washed Linen Tablecloth, Sage",  category:"tablecloth", style:"rustic",  price_cents:8900,  per_guest:false, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"tc-cotton-white", name:"Hemmed Cotton Cloth, White",     category:"tablecloth", style:"minimal", price_cents:3900,  per_guest:false, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"tc-jacquard-ruby",name:"Holiday Jacquard, Ruby",         category:"tablecloth", style:"festive", price_cents:11900, per_guest:false, image_url:IMG("photo-1543589077-47d81606c1bf") },
+
+  { id:"rn-burlap",   name:"Natural Burlap Runner",    category:"runner", style:"rustic",  price_cents:2400, per_guest:false, image_url:IMG("photo-1467003909585-2f8a72700288") },
+  { id:"rn-velvet",   name:"Velvet Runner, Forest",    category:"runner", style:"festive", price_cents:5400, per_guest:false, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"rn-linen",    name:"Slub Linen Runner, Oat",   category:"runner", style:"classic", price_cents:3900, per_guest:false, image_url:IMG("photo-1618220179428-22790b461013") },
+  { id:"rn-minimal",  name:"Unbleached Cotton Runner", category:"runner", style:"minimal", price_cents:1900, per_guest:false, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+
+  { id:"ch-gold",   name:"Gold Beaded Charger",  category:"charger", style:"festive", price_cents:1400, per_guest:true, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"ch-wood",   name:"Acacia Wood Charger",  category:"charger", style:"rustic",  price_cents:1800, per_guest:true, image_url:IMG("photo-1467003909585-2f8a72700288") },
+  { id:"ch-rattan", name:"Woven Rattan Charger", category:"charger", style:"modern",  price_cents:1600, per_guest:true, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"ch-matte",  name:"Matte Black Charger",  category:"charger", style:"minimal", price_cents:1200, per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+
+  { id:"dp-stone", name:"Stoneware Dinner Plate, Cream",   category:"dinner_plate", style:"classic", price_cents:2200, per_guest:true, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"dp-matte", name:"Matte Porcelain Plate, White",    category:"dinner_plate", style:"minimal", price_cents:1800, per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"dp-rim",   name:"Gold Rim Porcelain Plate",        category:"dinner_plate", style:"festive", price_cents:2800, per_guest:true, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"dp-terra", name:"Terracotta Hand-Thrown Plate",    category:"dinner_plate", style:"rustic",  price_cents:2400, per_guest:true, image_url:IMG("photo-1467003909585-2f8a72700288") },
+
+  { id:"sp-stone", name:"Stoneware Salad Plate, Cream",  category:"salad_plate", style:"classic", price_cents:1600, per_guest:true, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"sp-matte", name:"Matte Porcelain Salad, White",  category:"salad_plate", style:"minimal", price_cents:1400, per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"sp-rim",   name:"Gold Rim Salad Plate",          category:"salad_plate", style:"festive", price_cents:1900, per_guest:true, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"sp-terra", name:"Terracotta Salad Plate",        category:"salad_plate", style:"rustic",  price_cents:1700, per_guest:true, image_url:IMG("photo-1574672280600-4accfa5b6f98") },
+
+  { id:"np-linen-oat",  name:"Linen Napkin, Oat",       category:"napkin", style:"classic", price_cents:900,  per_guest:true, image_url:IMG("photo-1618220179428-22790b461013") },
+  { id:"np-linen-sage", name:"Linen Napkin, Sage",      category:"napkin", style:"rustic",  price_cents:900,  per_guest:true, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"np-cotton-wht", name:"Cotton Napkin, White",    category:"napkin", style:"minimal", price_cents:500,  per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"np-jacquard",   name:"Holiday Jacquard Napkin", category:"napkin", style:"festive", price_cents:1200, per_guest:true, image_url:IMG("photo-1543589077-47d81606c1bf") },
+
+  { id:"fw-matte-gold", name:"Matte Gold 5-Piece Flatware", category:"flatware", style:"festive", price_cents:3400, per_guest:true, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"fw-brushed",    name:"Brushed Steel Flatware",      category:"flatware", style:"modern",  price_cents:2200, per_guest:true, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"fw-classic",    name:"Classic Silverplate Flatware",category:"flatware", style:"classic", price_cents:2800, per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"fw-wood",       name:"Wood-Handle Flatware",        category:"flatware", style:"rustic",  price_cents:3100, per_guest:true, image_url:IMG("photo-1467003909585-2f8a72700288") },
+
+  { id:"gl-crystal", name:"Crystal Wine + Water Set", category:"glasses", style:"classic", price_cents:2600, per_guest:true, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"gl-ribbed",  name:"Ribbed Glass Set",         category:"glasses", style:"modern",  price_cents:2000, per_guest:true, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"gl-amber",   name:"Amber Tinted Glass Set",   category:"glasses", style:"festive", price_cents:2400, per_guest:true, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"gl-simple",  name:"Simple Tumbler Set",       category:"glasses", style:"minimal", price_cents:1400, per_guest:true, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+
+  { id:"cp-eucalyptus", name:"Fresh Eucalyptus Garland",     category:"centerpiece", style:"rustic",  price_cents:4500, per_guest:false, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"cp-pumpkins",   name:"Heirloom Pumpkin Arrangement", category:"centerpiece", style:"festive", price_cents:6800, per_guest:false, image_url:IMG("photo-1574672280600-4accfa5b6f98") },
+  { id:"cp-roses",      name:"Blush Rose Low Bouquet",       category:"centerpiece", style:"classic", price_cents:7400, per_guest:false, image_url:IMG("photo-1543589077-47d81606c1bf") },
+  { id:"cp-branches",   name:"Bare Branch + Bud Vase Trio",  category:"centerpiece", style:"minimal", price_cents:3900, per_guest:false, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+
+  { id:"cd-tapers-ivory", name:"Ivory Taper Candles, Set of 6", category:"candles", style:"classic", price_cents:1800, per_guest:false, image_url:IMG("photo-1528605248644-14dd04022da1") },
+  { id:"cd-tapers-sage",  name:"Sage Tapers, Set of 6",         category:"candles", style:"rustic",  price_cents:1800, per_guest:false, image_url:IMG("photo-1615715035708-c3b8e9f5e8aa") },
+  { id:"cd-pillars",      name:"Unscented Pillar Trio",         category:"candles", style:"minimal", price_cents:2400, per_guest:false, image_url:IMG("photo-1513467535987-fd81bc7d62f8") },
+  { id:"cd-beeswax",      name:"Beeswax Tapers, Set of 4",      category:"candles", style:"festive", price_cents:2200, per_guest:false, image_url:IMG("photo-1543589077-47d81606c1bf") }
+];
+
+const PRODUCT_BY_ID = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+
+const SCENARIOS = [
+  { slug:"classic-thanksgiving", title:"A Classic Thanksgiving", occasion:"thanksgiving", style:"classic", default_guest_count:8, budget_tier:"250_500",
+    hero:IMG("photo-1574672280600-4accfa5b6f98",1200),
+    desc:"Warm neutrals, gold-rimmed plates, and a low garland of eucalyptus. A timeless setting that invites the family to linger.",
+    items:{tablecloth:"tc-linen-ivory",runner:"rn-linen",charger:"ch-gold",dinner_plate:"dp-rim",salad_plate:"sp-rim",napkin:"np-linen-oat",flatware:"fw-classic",glasses:"gl-crystal",centerpiece:"cp-eucalyptus",candles:"cd-tapers-ivory"} },
+  { slug:"festive-christmas-dinner", title:"Festive Christmas Dinner", occasion:"christmas", style:"festive", default_guest_count:10, budget_tier:"500_plus",
+    hero:IMG("photo-1543589077-47d81606c1bf",1200),
+    desc:"Deep reds, matte gold, and beeswax taper candles. Built for the big meal and the long conversation that follows.",
+    items:{tablecloth:"tc-jacquard-ruby",runner:"rn-velvet",charger:"ch-gold",dinner_plate:"dp-rim",salad_plate:"sp-rim",napkin:"np-jacquard",flatware:"fw-matte-gold",glasses:"gl-amber",centerpiece:"cp-pumpkins",candles:"cd-beeswax"} },
+  { slug:"modern-birthday-dinner", title:"Modern Birthday Dinner", occasion:"birthday", style:"modern", default_guest_count:6, budget_tier:"100_250",
+    hero:IMG("photo-1530103862676-de8c9debad1d",1200),
+    desc:"Brushed steel flatware, ribbed glasses, rattan chargers. Crisp, considered, and celebratory without being fussy.",
+    items:{tablecloth:"tc-cotton-white",runner:"rn-minimal",charger:"ch-rattan",dinner_plate:"dp-matte",salad_plate:"sp-matte",napkin:"np-cotton-wht",flatware:"fw-brushed",glasses:"gl-ribbed",centerpiece:"cp-roses",candles:"cd-pillars"} },
+  { slug:"minimal-dinner-party", title:"Minimal Dinner Party", occasion:"dinner_party", style:"minimal", default_guest_count:4, budget_tier:"under_100",
+    hero:IMG("photo-1528605248644-14dd04022da1",1200),
+    desc:"A pared-back setting for close friends. White porcelain, simple tumblers, and three pillar candles doing all the work.",
+    items:{tablecloth:"tc-cotton-white",runner:"rn-minimal",charger:"ch-matte",dinner_plate:"dp-matte",salad_plate:"sp-matte",napkin:"np-cotton-wht",flatware:"fw-brushed",glasses:"gl-simple",centerpiece:"cp-branches",candles:"cd-pillars"} },
+  { slug:"rustic-harvest-supper", title:"Rustic Harvest Supper", occasion:"dinner_party", style:"rustic", default_guest_count:8, budget_tier:"250_500",
+    hero:IMG("photo-1467003909585-2f8a72700288",1200),
+    desc:"Sage linens, terracotta plates, wood-handle flatware, and eucalyptus. A table that feels like a slow evening in the country.",
+    items:{tablecloth:"tc-linen-sage",runner:"rn-burlap",charger:"ch-wood",dinner_plate:"dp-terra",salad_plate:"sp-terra",napkin:"np-linen-sage",flatware:"fw-wood",glasses:"gl-ribbed",centerpiece:"cp-eucalyptus",candles:"cd-tapers-sage"} },
+  { slug:"easter-brunch", title:"Easter Brunch", occasion:"easter", style:"classic", default_guest_count:6, budget_tier:"100_250",
+    hero:IMG("photo-1589985270826-4b7bb135bc9d",1200),
+    desc:"Soft blush roses, ivory tapers, gold-rim plates. A brunch table that holds up from mimosas to coffee.",
+    items:{tablecloth:"tc-linen-ivory",runner:"rn-linen",charger:"ch-gold",dinner_plate:"dp-stone",salad_plate:"sp-stone",napkin:"np-linen-oat",flatware:"fw-matte-gold",glasses:"gl-crystal",centerpiece:"cp-roses",candles:"cd-tapers-ivory"} }
+];
+
+const BUDGET_LABEL = { under_100:"Under $100", "100_250":"$100–250", "250_500":"$250–500", "500_plus":"$500+" };
+const money = c => "$" + (Math.round(c)/100).toLocaleString("en-US",{maximumFractionDigits:0});
+const titleCase = s => s.replace(/_/g," ").replace(/\b\w/g, c => c.toUpperCase());
+
+function computeTotal(setup, guests) {
+  guests = Math.max(1, Math.floor(guests || 1));
+  let total = 0;
+  for (const s of SLOTS) {
+    const p = setup[s.id]; if (!p) continue;
+    total += p.price_cents * (s.per_guest ? guests : 1);
+  }
+  return total;
+}
+function resolveSetup(items) {
+  const out = {}; for (const [k,v] of Object.entries(items)) out[k] = PRODUCT_BY_ID[v];
+  return out;
+}
+function scenarioCard(s) {
+  const setup = resolveSetup(s.items);
+  const total = computeTotal(setup, s.default_guest_count);
+  return `<a class="group cursor-pointer" onclick="openScenario('${s.slug}')">
+    <div class="h-full bg-paper border border-stone-200 rounded-lg shadow-soft overflow-hidden group-hover:shadow-[0_2px_6px_rgba(0,0,0,0.06),_0_18px_40px_-18px_rgba(0,0,0,0.2)] transition">
+      <div class="aspect-[4/3] bg-stone-100 bg-center bg-cover" style="background-image:url('${s.hero}')"></div>
+      <div class="p-5">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium bg-stone-100 text-stone-700 border border-stone-200">${titleCase(s.occasion)}</span>
+          <span class="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium bg-stone-100 text-stone-700 border border-stone-200">${titleCase(s.style)}</span>
+        </div>
+        <h3 class="font-serif text-xl tracking-tight2">${s.title}</h3>
+        <p class="mt-1 text-sm text-stone-500 line-clamp-2">${s.desc}</p>
+        <div class="mt-4 flex items-baseline justify-between">
+          <span class="text-[13px] text-stone-500">For ${s.default_guest_count} guests</span>
+          <span class="font-medium">${money(total)}</span>
+        </div>
+      </div>
+    </div>
+  </a>`;
+}
+
+function showTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+  document.getElementById("tab-" + name).classList.remove("hidden");
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => { if (b.textContent.toLowerCase() === name) b.classList.add("active"); });
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+// Landing featured
+document.getElementById("featured-grid").innerHTML = SCENARIOS.slice(0,3).map(scenarioCard).join("");
+
+// Explore
+function applyFilters() {
+  const o = document.getElementById("f-occasion").value;
+  const st = document.getElementById("f-style").value;
+  const b = document.getElementById("f-budget").value;
+  const filtered = SCENARIOS.filter(s =>
+    (o==="all"||s.occasion===o) && (st==="all"||s.style===st) && (b==="all"||s.budget_tier===b));
+  document.getElementById("explore-grid").innerHTML =
+    filtered.length ? filtered.map(scenarioCard).join("")
+      : `<div class="sm:col-span-3 rounded-lg border border-stone-200 bg-paper p-10 text-center text-stone-600">No scenarios match those filters.</div>`;
+}
+applyFilters();
+
+// Scenario detail
+let currentScenario = SCENARIOS[0];
+function openScenario(slug) {
+  currentScenario = SCENARIOS.find(s => s.slug === slug) || SCENARIOS[0];
+  renderScenario();
+  showTab("scenario");
+}
+function renderScenario() {
+  const s = currentScenario;
+  const setup = resolveSetup(s.items);
+  const guests = s.default_guest_count;
+  const total = computeTotal(setup, guests);
+  document.getElementById("scenario-total").textContent = money(total);
+  document.getElementById("scenario-perguest").textContent = `About ${money(total/guests)} per guest · ${guests} guests`;
+  document.getElementById("items-list").innerHTML = SLOTS.map(slot => {
+    const p = setup[slot.id];
+    const qty = slot.per_guest ? guests : 1;
+    const sub = p.price_cents * qty;
+    return `<li class="flex items-center gap-4 px-4 py-3">
+      <div class="w-14 h-14 rounded bg-stone-100 bg-center bg-cover shrink-0" style="background-image:url('${p.image_url}')"></div>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center justify-between gap-3">
+          <p class="font-medium truncate">${p.name}</p>
+          <p class="text-sm text-stone-600 shrink-0">${money(sub)}</p>
+        </div>
+        <p class="text-[12px] text-stone-500">${slot.label} · ${slot.per_guest ? `${qty} × ${money(p.price_cents)}` : "fixed"}</p>
+      </div>
+    </li>`;
+  }).join("");
+  // Also prime customizer from this scenario
+  custSetup = { ...setup };
+  document.getElementById("cust-guests").value = guests;
+  renderCustomizer();
+}
+renderScenario();
+
+// Customizer
+let custSetup = resolveSetup(SCENARIOS[0].items);
+function renderCustomizer() {
+  const guests = parseInt(document.getElementById("cust-guests").value,10) || 1;
+  const total = computeTotal(custSetup, guests);
+  document.getElementById("cust-total").textContent = money(total);
+  document.getElementById("slot-grid").innerHTML = SLOTS.map(slot => {
+    const p = custSetup[slot.id];
+    const qty = slot.per_guest ? guests : 1;
+    return `<button class="text-left rounded-lg border border-stone-200 bg-paper p-3 flex gap-3 items-center hover:border-accent transition" onclick="openDrawer('${slot.id}')">
+      <div class="w-16 h-16 rounded bg-stone-100 bg-center bg-cover shrink-0" style="background-image:url('${p.image_url}')"></div>
+      <div class="min-w-0 flex-1">
+        <p class="text-[11px] uppercase tracking-wider text-stone-500">${slot.label}</p>
+        <p class="text-sm font-medium truncate">${p.name}</p>
+        <p class="text-[12px] text-stone-500">${slot.per_guest ? `${qty} × ${money(p.price_cents)}` : money(p.price_cents)}</p>
+      </div>
+    </button>`;
+  }).join("");
+}
+
+function openDrawer(slotId) {
+  const slot = SLOTS.find(s => s.id === slotId);
+  document.getElementById("drawer-title").textContent = "Swap " + slot.label;
+  const items = PRODUCTS.filter(p => p.category === slotId);
+  document.getElementById("drawer-items").innerHTML = items.map(p => `
+    <button class="w-full text-left rounded-lg border border-stone-200 bg-paper p-3 flex gap-3 items-center hover:border-accent"
+            onclick="swap('${slotId}','${p.id}')">
+      <div class="w-14 h-14 rounded bg-stone-100 bg-center bg-cover shrink-0" style="background-image:url('${p.image_url}')"></div>
+      <div class="min-w-0 flex-1">
+        <p class="text-sm font-medium truncate">${p.name}</p>
+        <p class="text-[12px] text-stone-500">${titleCase(p.style)} · ${money(p.price_cents)}</p>
+      </div>
+      ${custSetup[slotId].id === p.id ? '<span class="text-xs text-accent">current</span>' : ''}
+    </button>
+  `).join("");
+  document.getElementById("drawer").classList.remove("hidden");
+}
+function closeDrawer(e) { if (!e || e.target === e.currentTarget) document.getElementById("drawer").classList.add("hidden"); }
+function swap(slotId, productId) {
+  custSetup[slotId] = PRODUCT_BY_ID[productId];
+  closeDrawer();
+  renderCustomizer();
+  renderShopping();
+}
+
+// Shopping list — grouped by section
+const SHOPPING_SECTIONS = [
+  { id:"linens", label:"Linens",                   slots:["tablecloth","runner","napkin"] },
+  { id:"plates", label:"Place settings",           slots:["charger","dinner_plate","salad_plate"] },
+  { id:"table",  label:"Flatware & glassware",     slots:["flatware","glasses"] },
+  { id:"decor",  label:"Decor",                    slots:["centerpiece","candles"] }
+];
+
+function buildShopping() {
+  const guests = parseInt(document.getElementById("cust-guests").value,10) || 1;
+  const groups = SHOPPING_SECTIONS.map(sec => {
+    let subtotal = 0;
+    const lines = sec.slots.map(slotId => {
+      const slot = SLOTS.find(s => s.id === slotId);
+      const p = custSetup[slotId];
+      const qty = slot.per_guest ? guests : 1;
+      const sub = p.price_cents * qty;
+      subtotal += sub;
+      return { slot, product: p, qty, sub };
+    });
+    return { section: sec, lines, subtotal };
+  });
+  const total = groups.reduce((a,g)=>a+g.subtotal,0);
+  return { groups, total, guests };
+}
+
+function renderShopping() {
+  const { groups, total, guests } = buildShopping();
+  const titleScenario = currentScenario.title;
+  document.getElementById("sl-title").textContent = `${titleScenario} — shopping list`;
+  document.getElementById("sl-sub").textContent = `${guests} guests · grouped by section`;
+  document.getElementById("sl-totallabel").textContent = `Total · ${guests} guests`;
+  document.getElementById("sl-perguest").textContent = `About ${money(total/guests)} per guest`;
+  document.getElementById("sl-total").textContent = money(total);
+
+  document.getElementById("sl-groups").innerHTML = groups.map(g => `
+    <section>
+      <header class="mb-2 flex items-baseline justify-between">
+        <h3 class="font-serif text-xl tracking-tight2">${g.section.label}</h3>
+        <span class="text-sm text-stone-500">${money(g.subtotal)}</span>
+      </header>
+      <ul class="divide-y divide-stone-200 border border-stone-200 rounded-lg overflow-hidden bg-paper">
+        ${g.lines.map(l => `
+          <li class="flex items-center gap-4 px-4 py-3">
+            <div class="w-12 h-12 rounded bg-stone-100 bg-center bg-cover shrink-0" style="background-image:url('${l.product.image_url}')"></div>
+            <div class="min-w-0 flex-1">
+              <p class="font-medium truncate">${l.product.name}</p>
+              <p class="text-[12px] text-stone-500">${l.slot.label} · qty ${l.qty}</p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="text-sm">${money(l.sub)}</p>
+              <p class="text-[12px] text-stone-500">${l.qty} × ${money(l.product.price_cents)}</p>
+            </div>
+          </li>`).join("")}
+      </ul>
+    </section>`).join("");
+}
+
+function copyShopping() {
+  const { groups, total, guests } = buildShopping();
+  const lines = [];
+  lines.push(`${currentScenario.title} — shopping list`);
+  lines.push(`${guests} guests · estimated total ${money(total)}`);
+  lines.push("");
+  for (const g of groups) {
+    lines.push(`# ${g.section.label} — ${money(g.subtotal)}`);
+    for (const l of g.lines)
+      lines.push(`  - ${l.product.name} (${l.slot.label}, qty ${l.qty}) — ${money(l.sub)}`);
+    lines.push("");
+  }
+  lines.push(`Total: ${money(total)}`);
+  navigator.clipboard.writeText(lines.join("\n")).then(() => {
+    const btn = document.getElementById("sl-copy");
+    const orig = btn.textContent;
+    btn.textContent = "Copied ✓";
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  });
+}
+
+renderShopping();
+</script>
+
+</body>
+</html>

@@ -47,6 +47,7 @@ export async function listScenarios(): Promise<Scenario[]> {
       style: s.style,
       description: s.description,
       hero_image_url: s.hero_image_url,
+      generated_hero_url: s.generated_hero_url ?? null,
       default_guest_count: s.default_guest_count,
       budget_tier: s.budget_tier,
       items: itemMap

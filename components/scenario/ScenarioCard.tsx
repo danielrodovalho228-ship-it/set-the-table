@@ -17,7 +17,7 @@ export function ScenarioCard({ scenario }: { scenario: Scenario }) {
       <Card className="h-full group-hover:shadow-[0_2px_6px_rgba(0,0,0,0.06),_0_18px_40px_-18px_rgba(0,0,0,0.2)] transition">
         <div
           className="aspect-[4/3] bg-stone-100 bg-center bg-cover"
-          style={{ backgroundImage: `url(${scenario.hero_image_url})` }}
+          style={{ backgroundImage: `url(${scenario.generated_hero_url ?? scenario.hero_image_url})` }}
           aria-hidden
         />
         <div className="p-5">
